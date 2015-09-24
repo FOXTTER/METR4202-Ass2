@@ -8,7 +8,6 @@ cy = cameraParams.PrincipalPoint(2);
 r = cameraParams.RotationMatrices(:,:,end);
 t = cameraParams.TranslationVectors(end,:);
 rot = [[0 1 0];[1 0 0];[0 0 -1]];
-offset = [0 -200 -35];
 framePos = [0 0 0];
 vidRGB = videoinput('kinectv2imaq', 1, 'RGB32_1920x1080');
 vidDepth = videoinput('kinectv2imaq', 2, 'MONO12_512x423');
@@ -25,7 +24,7 @@ start(vidDepth);
 trigger(vidRGB);
 trigger(vidDepth);
 fprintf('Position of Camera: ');
-disp((rot*r*(0-t)' + offset' + framePos' + [0 100 0]')');
+disp((rot*r*(0-t)' + framePos')');
 %%
 avg = getdata(vidRGB);
 avg = undistortImage(avg,cameraParams);
@@ -98,7 +97,7 @@ while(1)
                 hands = hands +1;
                 fakePos = [xm, ym, zm];
                 realPos = r*(fakePos-t)';
-                realPos = rot*realPos + offset' ;
+                realPos = rot*realPos;
                 fprintf('Position pen(%d): %f, %f, %f)\n', pens, realPos(1),realPos(2),realPos(3));
             end
         end
@@ -116,7 +115,7 @@ while(1)
             hands = hands +1;
             fakePos = [xm, ym, zm];
             realPos = r*(fakePos-t)';
-            realPos = rot*realPos + offset'+ framePos' ;
+            realPos = rot*realPos + framePos' ;
             fprintf('Position hand(%d): %f, %f, %f)\n', i, realPos(1),realPos(2),realPos(3));
         end
     end

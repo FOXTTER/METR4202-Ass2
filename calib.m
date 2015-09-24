@@ -22,15 +22,6 @@ fprintf('RGB: ');
 disp(rgb);
 fprintf('HSV: ');
 disp(hsv);
-%% Color calibration
-if (color)
-    trigger(vidRGB);
-    col = flip(getdata(vidRGB),2);
-    imwrite(col,'col.png');
-    T = estimate_color_matrix('col.png', 'GretagMacbeth', 4);
-end
-trigger(vidRGB);
-trigger(vidDepth);
 %%
 i = 0;
 imageFileNames = {}
@@ -47,27 +38,7 @@ while(i < 15)
     fprintf('Got image %d \n', i);
     pause(5)
 end
-%%
-imageFileNames = {}
-    trigger(vidRGB);
-    trigger(vidDepth);
-    RGB = getdata(vidRGB);
-    RGB = flip(RGB,2);
-    imshow(RGB);
-        filename = sprintf('cali/image_new0.png', i);
-    imwrite(RGB,filename);
-        filename = sprintf('cali/image_new7.png', i);
-    imwrite(RGB,filename);
-        filename = sprintf('cali/image_new8.png', i);
-    imwrite(RGB,filename);
-        filename = sprintf('cali/image_new9.png', i);
-    imwrite(RGB,filename);
-    filename = sprintf('cali/zz.png', length(filename)+1);
-    imwrite(RGB,filename);
-    i = i + 1;
-    imageFileNames{i} = filename;
-    fprintf('Got image %d \n', i);
-    pause(5)
+
 %%
 % Detect checkerboards in images
 [imagePoints, boardSize, imagesUsed] = detectCheckerboardPoints(imageFileNames);
